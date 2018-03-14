@@ -944,10 +944,18 @@ class Legend(Artist):
                 textbox = TextArea(lab, textprops=label_prop,
                                    multilinebaseline=True,
                                    minimumdescent=True)
-                handlebox = DrawingArea(width=self.handlelength * fontsize,
-                                        height=height,
-                                        xdescent=0., ydescent=descent)
+                box_width = self.handlelength * fontsize
+                box_height = height
+                #CHANGED
+                if isinstance(orig_handle, Line2D):
+                        if orig_handle.get_markersize() > 15:
+                                print("Increase boxsize")
+                                box_width = box_width * orig_handle.get_markersize()/15.0
+                                box_height = box_height * orig_handle.get_markersize()/7.5
 
+                handlebox = DrawingArea(width=box_width,
+                                        height=box_height,
+                                        xdescent=0., ydescent=descent)
                 text_list.append(textbox._text)
                 # Create the artist for the legend which represents the
                 # original artist/handle.
