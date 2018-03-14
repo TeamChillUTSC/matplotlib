@@ -2296,10 +2296,39 @@ default: 'top'
         if renderer is None:
             renderer = get_renderer(self)
 
-        kwargs = get_tight_layout_figure(
-            self, self.axes, subplotspec_list, renderer,
-            pad=pad, h_pad=h_pad, w_pad=w_pad, rect=rect)
-        self.subplots_adjust(**kwargs)
+        layout_is_stable = False
+        limiter = 100
+
+        while not layout_is_stable and limiter > 0:
+            kwargs = get_tight_layout_figure(
+                self, self.axes, subplotspec_list, renderer,
+                pad=pad, h_pad=h_pad, w_pad=w_pad, rect=rect)
+
+            self.subplots_adjust(**kwargs)
+
+            next_layout = get_tight_layout_figure(
+                self, self.axes, subplotspec_list, renderer,
+                pad=pad, h_pad=h_pad, w_pad=w_pad, rect=rect)
+
+            layout_is_stable = self.layouts_are_similar(kwargs, next_layout)
+            limiter -= 1
+
+        if limiter == 0:
+            warnings.warn("tight_layout is producing inconsistent results with this figure"
+                          ", so the produced results may not be optimal.")
+
+    def layouts_are_similar(self, layout1, layout2):
+        dimensions = layout1.keys()
+
+        for dim in dimensions:
+            val1 = layout1[dim]
+            val2 = layout2[dim]
+            ratio = abs(1 - (val1 / val2))
+
+            if ratio > 1e-4:
+                return False
+
+        return True
 
     def align_xlabels(self, axs=None):
         """
