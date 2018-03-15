@@ -90,7 +90,7 @@ def check_rectangle(**kwargs):
 
     if kwargs.get('drawtype', None) not in ['line', 'none']:
         assert_allclose(tool.geometry,
-                        [[100., 100, 199, 199, 100],
+                        [[100., 100, 199, 199, 100], 
                          [100, 199, 199, 100, 100]],
                         err_msg=tool.geometry)
 
@@ -120,7 +120,7 @@ def test_ellipse():
     # drag the rectangle
     do_event(tool, 'press', xdata=10, ydata=10, button=1,
              key=' ')
-
+                    
     do_event(tool, 'onmove', xdata=30, ydata=30, button=1)
     do_event(tool, 'release', xdata=30, ydata=30, button=1)
     assert tool.extents == (120, 170, 120, 170)
@@ -275,7 +275,7 @@ def test_check_radio_buttons_image():
 
 
 @image_comparison(baseline_images=['check_bunch_of_radio_buttons'],
-                  extensions=['png'],style='mpl20' remove_text=True)
+                  style='mpl20', extensions=['png'], remove_text=True)
 def test_check_bunch_of_radio_buttons():
     rax = plt.axes([0.05, 0.1, 0.15, 0.7])
     widgets.RadioButtons(rax, ('B1', 'B2', 'B3', 'B4', 'B5', 'B6',
@@ -453,3 +453,4 @@ def test_polygon_selector():
                       + polygon_place_vertex(50, 150)
                       + polygon_place_vertex(50, 50))
     check_polygon_selector(event_sequence, expected_result, 1)
+    
