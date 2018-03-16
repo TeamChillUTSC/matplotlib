@@ -2296,6 +2296,7 @@ default: 'top'
         if renderer is None:
             renderer = get_renderer(self)
 
+        # Call get_tight_layout_figure() until it produces consistent results
         layout_is_stable = False
         limiter = 100
 
@@ -2304,6 +2305,8 @@ default: 'top'
                 self, self.axes, subplotspec_list, renderer,
                 pad=pad, h_pad=h_pad, w_pad=w_pad, rect=rect)
 
+            # Subplots must be adjusted for get_tight_layout_figure() to use
+            # the new dimensions
             self.subplots_adjust(**kwargs)
 
             next_layout = get_tight_layout_figure(
@@ -2318,6 +2321,24 @@ default: 'top'
                           ", so the produced results may not be optimal.")
 
     def layouts_are_similar(self, layout1, layout2):
+        """
+        Determine whether two layout adjustments returned by
+        get_tight_layout_figure() are similar, based on a threshold.
+
+        Each layout is a dict containing the following keys:
+
+        - top
+        - left
+        - bottom
+        - right
+        - wspace
+        - hspace
+
+        Parameters
+        ----------
+
+        layout1, layout2: The layouts to be compared
+        """
         dimensions = layout1.keys()
 
         for dim in dimensions:
