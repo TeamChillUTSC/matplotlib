@@ -950,7 +950,6 @@ class Legend(Artist):
                 # Extend legend box if markersize is large
                 if isinstance(orig_handle, Line2D):
                         if orig_handle.get_markersize() > 15:
-                                print("Increase boxsize")
                                 box_width = box_width * orig_handle.get_markersize()/15.0
                                 box_height = box_height * orig_handle.get_markersize()/7.5
 
