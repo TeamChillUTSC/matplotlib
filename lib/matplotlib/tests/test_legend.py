@@ -522,3 +522,12 @@ def test_legend_title_empty():
     leg = ax.legend()
     assert leg.get_title().get_text() == ""
     assert leg.get_title().get_visible() is False
+
+@image_comparison(baseline_images=['large_marker_legend'],
+                  extensions=['png'])
+def test_large_marker_legend():
+    a, = plt.plot(range(10), linestyle='--', marker='o',  markersize=30)
+    b, = plt.plot(range(10), marker='o',  markersize=25)
+    c, = plt.plot(range(10), marker='p',  markersize=20)
+    plt.legend([a, b, c], ["test", "marker", "sizes"],
+               ncol=3, loc=(0, 0))
