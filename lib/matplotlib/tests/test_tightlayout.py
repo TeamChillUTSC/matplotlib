@@ -272,3 +272,22 @@ def test_empty_layout():
 
     fig = plt.gcf()
     fig.tight_layout()
+
+@image_comparison(baseline_images=['tight_layout_stability'])
+def test_tight_layout_stability_single():
+    np.random.seed(19680801)
+    figure = plt.figure()
+    ax = figure.subplots(2,2)
+    for a in ax.flatten():
+            a.imshow(np.random.random((50,50)))
+    plt.tight_layout()
+
+@image_comparison(baseline_images=['tight_layout_stability'])
+def test_tight_layout_stability_multiple():
+    np.random.seed(19680801)
+    figure = plt.figure()
+    ax = figure.subplots(2,2)
+    for a in ax.flatten():
+            a.imshow(np.random.random((50,50)))
+    plt.tight_layout()
+    plt.tight_layout()
