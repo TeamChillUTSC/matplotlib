@@ -946,7 +946,8 @@ class Legend(Artist):
                                    minimumdescent=True)
                 box_width = self.handlelength * fontsize
                 box_height = height
-                #CHANGED
+
+                # Extend legend box if markersize is large
                 if isinstance(orig_handle, Line2D):
                         if orig_handle.get_markersize() > 15:
                                 print("Increase boxsize")

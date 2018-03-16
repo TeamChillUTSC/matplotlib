@@ -61,9 +61,6 @@ class HandlerBase(object):
     def __init__(self, xpad=0., ypad=0., update_func=None):
         self._xpad, self._ypad = xpad, ypad
         self._update_prop_func = update_func
-        # CHANGED
-        self._scalex = 1.0
-        self._scaley = 1.0
 
     def _update_prop(self, legend_handle, orig_handle):
         if self._update_prop_func is None:
@@ -127,19 +124,7 @@ class HandlerBase(object):
 
         # we only return the first artist
         return artists[0]
-    
-    #CHANGED
-    def scale_x(self):
-    	"""
-    	NEEDTODO
-    	"""
-    	return 1
-    
-    def scale_y(self):
-    	"""
-    	NEEDTODO
-    	"""
-    	return 1
+
     
     def create_artists(self, legend, orig_handle,
                        xdescent, ydescent, width, height, fontsize,
@@ -264,12 +249,6 @@ class HandlerLine2D(HandlerNpoints):
         if legend.markerscale != 1:
             newsz = legline_marker.get_markersize() * legend.markerscale
             legline_marker.set_markersize(newsz)
-        #CHANGED
-        print("HanderLine2D")
-        print(legline_marker.get_markersize());
-        if legline_marker.get_markersize() > 15:
-            self._scalex = legline_marker.get_markersize()/15.0
-            self._scaley = legline_marker.get_markersize()/15.0
         # we don't want to add this to the return list because
         # the texts and handles are assumed to be in one-to-one
         # correspondence.
@@ -279,22 +258,6 @@ class HandlerLine2D(HandlerNpoints):
         legline_marker.set_transform(trans)
 
         return [legline, legline_marker]
-
-    #CHANGED
-    def scale_x(self):
-	    """
-	    NEEDTODO
-	    """
-	    print("Scale")
-	    print(self._scalex)
-	    return self._scalex
-
-    def scale_y(self):
-	    """
-	    NEEDTODO
-	    """
-	    return self._scaley
-
 
 class HandlerPatch(HandlerBase):
     """
@@ -535,9 +498,7 @@ class HandlerErrorbar(HandlerLine2D):
             if legend.markerscale != 1:
                 newsz = legline_marker.get_markersize() * legend.markerscale
                 legline_marker.set_markersize(newsz)
-        # CHANGED
-        print("HandlerErrorbar")
-        print(legline_marker.get_markersize())
+
         handle_barlinecols = []
         handle_caplines = []
 
