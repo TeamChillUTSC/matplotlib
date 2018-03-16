@@ -2325,7 +2325,7 @@ default: 'top'
             val2 = layout2[dim]
             ratio = abs(1 - (val1 / val2))
 
-            if ratio > 1e-4:
+            if ratio > 1e-5:
                 return False
 
         return True
