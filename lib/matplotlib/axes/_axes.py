@@ -2021,9 +2021,24 @@ class Axes(_AxesBase):
             if yerr is not None:
                 yerr = self.convert_yunits(yerr)
 
+        if np.ndim(x) > 2:
+            raise ValueError('Invalid x dimensions: %s' % x)
+
+        if np.ndim(height) > 2:
+            raise ValueError('Invalid height dimensions: %s' % height)
+
+        if np.ndim(width) > 2:
+            raise ValueError('Invalid width dimensions: %s' % width)
+
+        if np.ndim(y) > 2:
+            raise ValueError('Invalid y dimensions: %s' % y)
+
+        if np.ndim(linewidth) > 2:
+            raise ValueError('Invalid linewidth dimensions: %s' % linewidth)
+
         x, height, width, y, linewidth = np.broadcast_arrays(
             # Make args iterable too.
-            np.atleast_1d(x), height, width, y, linewidth)
+            np.atleast_2d(x), height, width, y, linewidth)
 
         # Now that units have been converted, set the tick locations.
         if orientation == 'vertical':
@@ -2033,10 +2048,10 @@ class Axes(_AxesBase):
             tick_label_axis = self.yaxis
             tick_label_position = y
 
-        linewidth = itertools.cycle(np.atleast_1d(linewidth))
         color = itertools.chain(itertools.cycle(mcolors.to_rgba_array(color)),
                                 # Fallback if color == "none".
                                 itertools.repeat([0, 0, 0, 0]))
+
         if edgecolor is None:
             edgecolor = itertools.repeat(None)
         else:
@@ -2060,24 +2075,30 @@ class Axes(_AxesBase):
         else:
             raise ValueError('invalid alignment: %s' % align)
 
+        num_datasets = len(left)
         patches = []
-        args = zip(left, bottom, width, height, color, edgecolor, linewidth)
-        for l, b, w, h, c, e, lw in args:
-            r = mpatches.Rectangle(
-                xy=(l, b), width=w, height=h,
-                facecolor=c,
-                edgecolor=e,
-                linewidth=lw,
-                label='_nolegend_',
-                )
-            r.update(kwargs)
-            r.get_path()._interpolation_steps = 100
-            if orientation == 'vertical':
-                r.sticky_edges.y.append(b)
-            elif orientation == 'horizontal':
-                r.sticky_edges.x.append(l)
-            self.add_patch(r)
-            patches.append(r)
+
+        width = width / num_datasets
+
+        # TODO: Distribute colours over each data set instead over each bar.
+        for dataset_i in range(num_datasets):
+            args = zip(left[dataset_i], bottom[dataset_i], width[dataset_i], height[dataset_i], color, edgecolor, linewidth[dataset_i])
+            for l, b, w, h, c, e, lw in args:
+                r = mpatches.Rectangle(
+                    xy=(l + w * dataset_i, b), width=w, height=h,
+                    facecolor=c,
+                    edgecolor=e,
+                    linewidth=lw,
+                    label='_nolegend_',
+                    )
+                r.update(kwargs)
+                r.get_path()._interpolation_steps = 100
+                if orientation == 'vertical':
+                    r.sticky_edges.y.append(b)
+                elif orientation == 'horizontal':
+                    r.sticky_edges.x.append(l)
+                self.add_patch(r)
+                patches.append(r)
 
         if xerr is not None or yerr is not None:
             if orientation == 'vertical':
