@@ -2085,8 +2085,8 @@ class Axes(_AxesBase):
         colors = list(itertools.islice(color, num_datasets))
         edgecolors = list(itertools.islice(edgecolor, num_datasets))
         for dataset_i in range(num_datasets):
-            args = zip(left[dataset_i], bottom[dataset_i], width[dataset_i], height[dataset_i], color, edgecolor, linewidth[dataset_i])
-            for l, b, w, h, c, e, lw in args:
+            args = zip(left[dataset_i], bottom[dataset_i], width[dataset_i], height[dataset_i], linewidth[dataset_i])
+            for l, b, w, h, lw in args:
                 r = mpatches.Rectangle(
                     xy=(l + w * dataset_i, b), width=w, height=h,
                     facecolor=colors[dataset_i],
