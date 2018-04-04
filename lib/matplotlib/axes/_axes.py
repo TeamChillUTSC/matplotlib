@@ -2043,10 +2043,12 @@ class Axes(_AxesBase):
         # Now that units have been converted, set the tick locations.
         if orientation == 'vertical':
             tick_label_axis = self.xaxis
-            tick_label_position = x
+            # Consider only first dataset
+            tick_label_position = x[0]
         elif orientation == 'horizontal':
             tick_label_axis = self.yaxis
-            tick_label_position = y
+            # Consider only first dataset
+            tick_label_position = y[0]
 
         color = itertools.chain(itertools.cycle(mcolors.to_rgba_array(color)),
                                 # Fallback if color == "none".
