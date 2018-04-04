@@ -2080,14 +2080,15 @@ class Axes(_AxesBase):
 
         width = width / num_datasets
 
-        # TODO: Distribute colours over each data set instead over each bar.
+        colors = list(itertools.islice(color, num_datasets))
+        edgecolors = list(itertools.islice(edgecolor, num_datasets))
         for dataset_i in range(num_datasets):
             args = zip(left[dataset_i], bottom[dataset_i], width[dataset_i], height[dataset_i], color, edgecolor, linewidth[dataset_i])
             for l, b, w, h, c, e, lw in args:
                 r = mpatches.Rectangle(
                     xy=(l + w * dataset_i, b), width=w, height=h,
-                    facecolor=c,
-                    edgecolor=e,
+                    facecolor=colors[dataset_i],
+                    edgecolor=edgecolors[dataset_i],
                     linewidth=lw,
                     label='_nolegend_',
                     )
