@@ -1195,6 +1195,20 @@ def test_pcolorargs():
     with pytest.raises(ValueError):
         ax.pcolormesh(x, y, Z[:-1, :-1])
 
+#D01MOD
+
+@image_comparison(baseline_images=['pcolor_heatmap_labels'],
+                  extensions=['png'], remove_text=False)
+def test_pcolor_heatmap_labels():
+    a = [[1, 1.5, 2, 0.5, 0], [3, 2, 0, -0.5, -3], [2, 2.5, 1, -3.5, -2], [-1, -1.5, 2.5, 1.5, -1], [-0.5, 2.5, 1, -1.5, 2]]
+    plt.pcolor(a, showdata=True)
+
+@image_comparison(baseline_images=['pcolormesh_heatmap_labels'],
+                  extensions=['png'], remove_text=False)
+def test_pcolormesh_heatmap_labels():
+    a = [[1, 1.5, 2, 0.5, 0], [3, 2, 0, -0.5, -3], [2, 2.5, 1, -3.5, -2], [-1, -1.5, 2.5, 1.5, -1], [-0.5, 2.5, 1, -1.5, 2]]
+    plt.pcolormesh(a, showdata=True)
+
 
 @image_comparison(baseline_images=['canonical'])
 def test_canonical():
