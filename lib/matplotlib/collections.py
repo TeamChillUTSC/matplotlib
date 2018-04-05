@@ -900,6 +900,30 @@ class PathCollection(_CollectionWithSizes):
     def get_paths(self):
         return self._paths
 
+class MarkerCollection(PathCollection):
+    """
+    A specialized collection that stores markers. :class: 'PathCollection' subclass.
+    """
+    @docstring.dedent_interpd
+    def __init__(self, paths, sizes=None, marker=None, **kwargs):
+        """
+        *paths* is a sequence of :class:`matplotlib.path.Path`
+        instances.
+
+        %(Collection)s
+        """
+
+        PathCollection.__init__(self, paths, sizes, **kwargs)
+        self.set_marker(marker)
+        
+
+    def set_marker(self, marker):
+        self._marker = marker
+
+    def get_marker(self):
+        return self._marker
+
+
 
 class PolyCollection(_CollectionWithSizes):
     @docstring.dedent_interpd

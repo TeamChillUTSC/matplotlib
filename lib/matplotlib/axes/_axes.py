@@ -4070,14 +4070,15 @@ class Axes(_AxesBase):
 
         offsets = np.column_stack([x, y])
 
-        collection = mcoll.PathCollection(
+        collection = mcoll.MarkerCollection(
                 (path,), scales,
                 facecolors=colors,
                 edgecolors=edgecolors,
                 linewidths=linewidths,
                 offsets=offsets,
                 transOffset=kwargs.pop('transform', self.transData),
-                alpha=alpha
+                alpha=alpha,
+                marker=marker_obj
                 )
         collection.set_transform(mtransforms.IdentityTransform())
         collection.update(kwargs)
