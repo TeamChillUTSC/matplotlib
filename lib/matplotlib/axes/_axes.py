@@ -5328,6 +5328,7 @@ class Axes(_AxesBase):
         self.autoscale_view()
         return collection
 
+
     #### plotting z(x,y): imshow, pcolor and relatives, contour
     @_preprocess_data(label_namer=None)
     def imshow(self, X, cmap=None, norm=None, aspect=None,
@@ -5562,6 +5563,18 @@ class Axes(_AxesBase):
         C = cbook.safe_masked_invalid(C)
         return X, Y, C
 
+    def _showdata(self, collection, values):
+        """Show data
+        D01MOD
+        """
+        hm_segments = collection.get_paths()
+        for i, seg in enumerate(hm_segments):
+            x = seg.vertices[0][0] + 0.5
+            y = seg.vertices[0][1] + 0.5
+            value = '%.3f' % values[i]
+            t = mtext.Text(x=x, y=y, text=value, ha="center", va="center")
+            self._add_text(t)
+
     @_preprocess_data(label_namer=None)
     @docstring.dedent_interpd
     def pcolor(self, *args, **kwargs):
@@ -5628,6 +5641,9 @@ class Axes(_AxesBase):
 
         snap : bool, optional, default: False
             Whether to snap the mesh to pixel boundaries.
+
+        showvals : bool, optional, default: False
+            Whether to display values of colourmap.
 
         Returns
         -------
@@ -5713,8 +5729,12 @@ class Axes(_AxesBase):
         vmin = kwargs.pop('vmin', None)
         vmax = kwargs.pop('vmax', None)
 
+        #D01MOD
+        showdata = kwargs.pop('showdata', None)
+
         X, Y, C = self._pcolorargs('pcolor', *args, allmatch=False)
         Ny, Nx = X.shape
+
 
         # unit conversion allows e.g. datetime objects as axis values
         self._process_unit_info(xdata=X, ydata=Y, kwargs=kwargs)
@@ -5811,6 +5831,11 @@ class Axes(_AxesBase):
         corners = (minx, miny), (maxx, maxy)
         self.update_datalim(corners)
         self.autoscale_view()
+
+        #D01MOD
+        if showdata:
+            self._showdata(collection, C)
+
         return collection
 
     @_preprocess_data(label_namer=None)
@@ -5903,6 +5928,9 @@ class Axes(_AxesBase):
         antialiased = kwargs.pop('antialiased', False)
         kwargs.setdefault('edgecolors', 'None')
 
+        #D01MOD
+        showdata = kwargs.pop('showdata', None)
+
         allmatch = (shading == 'gouraud')
 
         X, Y, C = self._pcolorargs('pcolormesh', *args, allmatch=allmatch)
@@ -5949,6 +5977,11 @@ class Axes(_AxesBase):
         collection.sticky_edges.x[:] = [minx, maxx]
         collection.sticky_edges.y[:] = [miny, maxy]
         corners = (minx, miny), (maxx, maxy)
+
+        #D01MOD
+        if showdata:
+            self._showdata(collection, C)
+
         self.update_datalim(corners)
         self.autoscale_view()
         return collection
