@@ -2021,6 +2021,8 @@ class Axes(_AxesBase):
             if yerr is not None:
                 yerr = self.convert_yunits(yerr)
 
+        dimx = np.ndim(height)
+
         if np.ndim(x) > 2:
             raise ValueError('Invalid x dimensions: %s' % x)
 
@@ -2082,15 +2084,19 @@ class Axes(_AxesBase):
 
         width = width / num_datasets
 
-        colors = list(itertools.islice(color, num_datasets))
-        edgecolors = list(itertools.islice(edgecolor, num_datasets))
         for dataset_i in range(num_datasets):
-            args = zip(left[dataset_i], bottom[dataset_i], width[dataset_i], height[dataset_i], linewidth[dataset_i])
-            for l, b, w, h, lw in args:
+            if dimx == 2:
+                colors = itertools.cycle(itertools.islice(color, 1))
+                edgecolors = itertools.cycle(itertools.islice(edgecolor, 1))
+            else:
+                colors = color
+                edgecolors = edgecolor
+            args = zip(left[dataset_i], bottom[dataset_i], width[dataset_i], height[dataset_i], colors, edgecolors, linewidth[dataset_i])
+            for l, b, w, h, c, e, lw in args:
                 r = mpatches.Rectangle(
                     xy=(l + w * dataset_i, b), width=w, height=h,
-                    facecolor=colors[dataset_i],
-                    edgecolor=edgecolors[dataset_i],
+                    facecolor=c,
+                    edgecolor=e,
                     linewidth=lw,
                     label='_nolegend_',
                     )
