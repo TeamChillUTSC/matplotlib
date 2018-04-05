@@ -2091,7 +2091,13 @@ class Axes(_AxesBase):
             else:
                 colors = color
                 edgecolors = edgecolor
-            args = zip(left[dataset_i], bottom[dataset_i], width[dataset_i], height[dataset_i], colors, edgecolors, linewidth[dataset_i])
+            args = zip(left[dataset_i],
+                       bottom[dataset_i],
+                       width[dataset_i],
+                       height[dataset_i],
+                       colors,
+                       edgecolors,
+                       linewidth[dataset_i])
             for l, b, w, h, c, e, lw in args:
                 r = mpatches.Rectangle(
                     xy=(l + w * dataset_i, b), width=w, height=h,
@@ -2149,7 +2155,8 @@ class Axes(_AxesBase):
         self.add_container(bar_container)
 
         if tick_labels is not None:
-            tick_labels = np.broadcast_to(tick_labels, len(patches) // num_datasets)
+            tick_labels = np.broadcast_to(tick_labels,
+                                          len(patches) // num_datasets)
             tick_label_axis.set_ticks(tick_label_position)
             tick_label_axis.set_ticklabels(tick_labels)
 
