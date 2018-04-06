@@ -12,6 +12,7 @@ line segemnts)
 import math
 from numbers import Number
 import warnings
+import matplotlib.markers as mmarkers
 
 import numpy as np
 
@@ -900,6 +901,7 @@ class PathCollection(_CollectionWithSizes):
     def get_paths(self):
         return self._paths
 
+
 class MarkerCollection(PathCollection):
     """
     A specialized collection that stores markers. :class: 'PathCollection' subclass.
@@ -921,9 +923,10 @@ class MarkerCollection(PathCollection):
         self._marker = marker
 
     def get_marker(self):
-        return self._marker
-
-
+        if(isinstance(self._marker, mmarkers.MarkerStyle)):
+            return self._marker.get_marker()
+        else:
+            return self._marker
 
 class PolyCollection(_CollectionWithSizes):
     @docstring.dedent_interpd

@@ -5635,3 +5635,10 @@ def test_empty_errorbar_legend():
 def test_plot_columns_cycle_deprecation():
     with pytest.warns(MatplotlibDeprecationWarning):
         plt.plot(np.zeros((2, 2)), np.zeros((2, 3)))
+
+def test_scatter_get_marker():
+    fig = plt.figure()
+    mcollect = plt.scatter(0, 0, marker=".")
+
+    assert mcollect.get_marker() == "." 
+

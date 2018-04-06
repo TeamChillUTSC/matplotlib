@@ -12,6 +12,7 @@ import pytest
 import matplotlib.pyplot as plt
 import matplotlib.collections as mcollections
 import matplotlib.transforms as mtransforms
+import matplotlib.markers as mmarkers
 from matplotlib.collections import Collection, LineCollection, EventCollection
 from matplotlib.testing.decorators import image_comparison
 
@@ -669,3 +670,21 @@ def test_scatter_post_alpha():
     # this needs to be here to update internal state
     fig.canvas.draw()
     sc.set_alpha(.1)
+
+def test_marker_collection_string():
+    '''
+    tests if get_marker returns the correct data
+    '''
+    fig = plt.figure()
+    mcollect = plt.scatter(0, 0, marker="o")
+
+    assert mcollect.get_marker() == "o"
+
+def test_marker_collection_marker_object():
+    '''
+    tests if get_marker returns the correct data
+    '''
+    fig = plt.figure()
+    mcollect = plt.scatter(0, 0, marker=mmarkers.MarkerStyle("."))
+
+    assert mcollect.get_marker() == "."
