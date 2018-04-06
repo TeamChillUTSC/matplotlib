@@ -1839,13 +1839,13 @@ class Axes(_AxesBase):
             The x coordinates of the bars. See also *align* for the
             alignment of the bars to the coordinates.
 
-        height : scalar or sequence of scalars
+        height : scalar or 1D/2D array of scalars
             The height(s) of the bars.
 
-        width : scalar or array-like, optional
+        width : scalar or 1D/2D array of scalars, optional
             The width(s) of the bars (default: 0.8).
 
-        bottom : scalar or array-like, optional
+        bottom : sscalar or 1D/2D array of scalars, optional
             The y coordinate(s) of the bars bases (default: 0).
 
         align : {'center', 'edge'}, optional, default: 'center'
@@ -1864,13 +1864,13 @@ class Axes(_AxesBase):
 
         Other Parameters
         ----------------
-        color : scalar or array-like, optional
+        color : scalar or 1D/2D array of scalars, optional
             The colors of the bar faces.
 
-        edgecolor : scalar or array-like, optional
+        edgecolor : scalar or 1D/2D array of scalars, optional
             The colors of the bar edges.
 
-        linewidth : scalar or array-like, optional
+        linewidth : scalar or 1D/2D array of scalars, optional
             Width of the bar edge(s). If 0, don't draw edges.
 
         tick_label : string or array-like, optional
@@ -2021,8 +2021,11 @@ class Axes(_AxesBase):
             if yerr is not None:
                 yerr = self.convert_yunits(yerr)
 
+        # Store the dimensions of the original data, before broadcasting
         dimx = np.ndim(height)
 
+        # Provide useful errors if any data or parameters were passed in
+        # as more than two-dimensional arrays, instead of failing later on
         if np.ndim(x) > 2:
             raise ValueError('Invalid x dimensions: %s' % x)
 
@@ -2055,7 +2058,6 @@ class Axes(_AxesBase):
         color = itertools.chain(itertools.cycle(mcolors.to_rgba_array(color)),
                                 # Fallback if color == "none".
                                 itertools.repeat([0, 0, 0, 0]))
-
         if edgecolor is None:
             edgecolor = itertools.repeat(None)
         else:
@@ -2082,6 +2084,7 @@ class Axes(_AxesBase):
         num_datasets = len(left)
         patches = []
 
+        # Reduce the width of each bar
         width = width / num_datasets
 
         for dataset_i in range(num_datasets):
@@ -2089,6 +2092,8 @@ class Axes(_AxesBase):
                 colors = itertools.cycle(itertools.islice(color, 1))
                 edgecolors = itertools.cycle(itertools.islice(edgecolor, 1))
             else:
+                # Preserve compatiblity with existing code which passed in
+                # a 1D array of colors
                 colors = color
                 edgecolors = edgecolor
             args = zip(left[dataset_i],
@@ -2099,6 +2104,7 @@ class Axes(_AxesBase):
                        edgecolors,
                        linewidth[dataset_i])
             for l, b, w, h, c, e, lw in args:
+                # Plot each bar, including an appropriate offset
                 r = mpatches.Rectangle(
                     xy=(l + w * dataset_i, b), width=w, height=h,
                     facecolor=c,
