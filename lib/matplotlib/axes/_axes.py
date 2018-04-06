@@ -5318,8 +5318,22 @@ class Axes(_AxesBase):
         return X, Y, C
 
     def _showdata(self, collection, values):
-        """Show data
-        D01MOD
+        """
+        Add heatmap values as annotations on pcolor.
+
+        Parameters
+        ----------
+        collection : `matplotlib.collections.Collection`
+                     A Collection of polygons used by pcolor
+
+        values : array_like
+                 An array of color values corresponding collection
+
+        Notes
+        -----
+        Helper method used to annotated segments of a heatmap.
+        Uses the user-set font profile for annotations
+
         """
         hm_segments = collection.get_paths()
         for i, seg in enumerate(hm_segments):
@@ -5396,7 +5410,7 @@ class Axes(_AxesBase):
         snap : bool, optional, default: False
             Whether to snap the mesh to pixel boundaries.
 
-        showvals : bool, optional, default: False
+        showdata : bool, optional, default: False
             Whether to display values of colourmap.
 
         Returns
@@ -5478,13 +5492,10 @@ class Axes(_AxesBase):
         cmap = kwargs.pop('cmap', None)
         vmin = kwargs.pop('vmin', None)
         vmax = kwargs.pop('vmax', None)
-
-        #D01MOD
         showdata = kwargs.pop('showdata', None)
 
         X, Y, C = self._pcolorargs('pcolor', *args, allmatch=False)
         Ny, Nx = X.shape
-
 
         # unit conversion allows e.g. datetime objects as axis values
         self._process_unit_info(xdata=X, ydata=Y, kwargs=kwargs)
@@ -5581,7 +5592,7 @@ class Axes(_AxesBase):
         self.update_datalim(corners)
         self.autoscale_view()
 
-        #D01MOD
+        # Add annotations if showdata is True
         if showdata:
             self._showdata(collection, C)
 
@@ -5647,6 +5658,10 @@ class Axes(_AxesBase):
         alpha : scalar, optional
             Alpha blending value. Must be between 0 and 1.
 
+
+        showdata : bool, optional, default: False
+            Whether to display values of colourmap.
+
         Returns
         -------
         matplotlib.collections.QuadMesh
@@ -5673,8 +5688,6 @@ class Axes(_AxesBase):
         shading = kwargs.pop('shading', 'flat').lower()
         antialiased = kwargs.pop('antialiased', False)
         kwargs.setdefault('edgecolors', 'None')
-
-        #D01MOD
         showdata = kwargs.pop('showdata', None)
 
         allmatch = (shading == 'gouraud')
@@ -5724,7 +5737,7 @@ class Axes(_AxesBase):
         collection.sticky_edges.y[:] = [miny, maxy]
         corners = (minx, miny), (maxx, maxy)
 
-        #D01MOD
+        # Add Annotations if showdata True
         if showdata:
             self._showdata(collection, C)
 
