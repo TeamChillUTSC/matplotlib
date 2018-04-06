@@ -671,6 +671,7 @@ def test_scatter_post_alpha():
     fig.canvas.draw()
     sc.set_alpha(.1)
 
+
 def test_marker_collection_string():
     '''
     tests if get_marker returns the correct data
@@ -679,6 +680,7 @@ def test_marker_collection_string():
     mcollect = plt.scatter(0, 0, marker="o")
 
     assert mcollect.get_marker() == "o"
+
 
 def test_marker_collection_marker_object():
     '''

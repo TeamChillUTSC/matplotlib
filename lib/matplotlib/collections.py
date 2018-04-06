@@ -904,7 +904,8 @@ class PathCollection(_CollectionWithSizes):
 
 class MarkerCollection(PathCollection):
     """
-    A specialized collection that stores markers. :class: 'PathCollection' subclass.
+    A specialized collection that stores markers. :class: 'PathCollection'
+    subclass.
     """
     @docstring.dedent_interpd
     def __init__(self, paths, sizes=None, marker=None, **kwargs):
@@ -917,7 +918,6 @@ class MarkerCollection(PathCollection):
 
         PathCollection.__init__(self, paths, sizes, **kwargs)
         self.set_marker(marker)
-        
 
     def set_marker(self, marker):
         self._marker = marker
@@ -927,6 +927,7 @@ class MarkerCollection(PathCollection):
             return self._marker.get_marker()
         else:
             return self._marker
+
 
 class PolyCollection(_CollectionWithSizes):
     @docstring.dedent_interpd
